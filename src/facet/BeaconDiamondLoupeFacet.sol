@@ -8,12 +8,12 @@ import {DiamondBeaconUtils} from "../util/DiamondBeaconUtils.sol";
 /**
  * @notice An implementation of {IDiamondLoupe} that forwards all calls to the
  * Beacon.
- * @dev This implementation is intended to be added on the DiamondBeacon as a
- * facet that is called and used by the proxy as its implementation.
+ * @dev This implementation is intended to be added on the DiamondBeacon config
+ * as a facet that is called and used by the proxy as its implementation.
  * When using the original {DiamondLoupe} implementation, it would lookup facets
  * in the within the proxy's storage. However, this is wrong as the proxy itself
  * does not contain the diamond infrastructure, but gets its facets from the
- * Beacon
+ * Beacon. Thus, a lookup on the beacon is necessary
  */
 contract BeaconDiamondLoupeFacet is IDiamondLoupe {
     function _getBeaconLoupe() private view returns (IDiamondLoupe) {

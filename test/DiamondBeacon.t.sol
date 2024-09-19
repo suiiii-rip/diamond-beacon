@@ -8,11 +8,9 @@ import {IDiamond} from "diamond-1-hardhat/interfaces/IDiamond.sol";
 import {IDiamondCut} from "diamond-1-hardhat/interfaces/IDiamondCut.sol";
 import {IDiamondLoupe} from "diamond-1-hardhat/interfaces/IDiamondLoupe.sol";
 
-import {IERC165} from "openzeppelin-contracts/interfaces/IERC165.sol";
-
 import {IERC173} from "diamond-1-hardhat/interfaces/IERC173.sol";
 
-import {IDiamondBeaconERC165} from "../src/interface/IDiamondBeaconERC165.sol";
+import {IDiamondBeaconERC165Support} from "../src/interface/IDiamondBeaconERC165Support.sol";
 
 event Boom(uint256 strength);
 
@@ -28,74 +26,32 @@ contract Something is SomeInterface {
 
 contract DiamondBeaconTest is Test {
     DiamondBeacon private t;
-
+    Something private s;
     address private owner;
 
     function setUp() public {
         owner = address(123456);
 
-        Something _s = new Something();
+        s = new Something();
 
         IDiamond.FacetCut[] memory cuts = new IDiamond.FacetCut[](1);
         bytes4[] memory selectors = new bytes4[](1);
         selectors[0] = Something.doSomething.selector;
-        cuts[0] = IDiamond.FacetCut(address(_s), IDiamond.FacetCutAction.Add, selectors);
+        cuts[0] = IDiamond.FacetCut(address(s), IDiamond.FacetCutAction.Add, selectors);
 
         t = new DiamondBeacon(owner, cuts);
     }
 
-    function testSetDiamondSupportsInterface() public {
-        bytes4 id = type(SomeInterface).interfaceId;
-        assertFalse(t.diamondSupportsInterface(id));
-
-        bytes4[] memory interfaceIds = new bytes4[](1);
-        interfaceIds[0] = id;
-
-        vm.prank(owner);
-        t.setDiamondSupportsInterface(interfaceIds, IDiamondBeaconERC165.SupportsInterfaceOp.Add);
-
-        assertTrue(t.diamondSupportsInterface(id));
-
-        vm.prank(owner);
-        t.setDiamondSupportsInterface(interfaceIds, IDiamondBeaconERC165.SupportsInterfaceOp.Remove);
-        assertFalse(t.diamondSupportsInterface(id));
+    function testFacetCut() public view {
+        assertEq(t.facetAddress(Something.doSomething.selector), address(s));
     }
 
-    function testSetDiamondSupportsInterface_fuzz(bytes4[] memory interfaceIds) public {
-        for (uint256 i = 0; i < interfaceIds.length; i++) {
-            assertFalse(t.diamondSupportsInterface(interfaceIds[i]));
-        }
+    function testOwnership(address o) public {
+        assumePayable(o);
+        assumeNotPrecompile(o);
 
-        vm.prank(owner);
-        t.setDiamondSupportsInterface(interfaceIds, IDiamondBeaconERC165.SupportsInterfaceOp.Add);
+        t = new DiamondBeacon(o, new IDiamond.FacetCut[](0));
 
-        for (uint256 i = 0; i < interfaceIds.length; i++) {
-            assertTrue(t.diamondSupportsInterface(interfaceIds[i]));
-        }
-
-        vm.prank(owner);
-        t.setDiamondSupportsInterface(interfaceIds, IDiamondBeaconERC165.SupportsInterfaceOp.Remove);
-
-        for (uint256 i = 0; i < interfaceIds.length; i++) {
-            assertFalse(t.diamondSupportsInterface(interfaceIds[i]));
-        }
-    }
-
-    function testSetDiamondSupportsInterface_notOwner(address user, bytes4 id) public {
-        assertFalse(t.diamondSupportsInterface(id));
-
-        bytes4[] memory interfaceIds = new bytes4[](1);
-        interfaceIds[0] = id;
-
-        vm.startPrank(user);
-        vm.expectRevert();
-        t.setDiamondSupportsInterface(interfaceIds, IDiamondBeaconERC165.SupportsInterfaceOp.Add);
-    }
-
-    function testSupportsInterface() public view {
-        assertTrue(t.supportsInterface(type(IERC173).interfaceId), "IERC173");
-        assertTrue(t.supportsInterface(type(IERC165).interfaceId), "IERC165");
-        assertTrue(t.supportsInterface(type(IDiamondCut).interfaceId), "IDiamondCut");
-        assertTrue(t.supportsInterface(type(IDiamondLoupe).interfaceId), "IDiamondLoupe");
+        assertEq(t.owner(), o);
     }
 }
