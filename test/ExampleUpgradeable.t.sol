@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 
 import {IERC165} from "forge-std/interfaces/IERC165.sol";
 
-import {DiamondBeacon} from "../src/DiamondBeacon.sol";
+import {DiamondBeaconUpgradeable} from "../src/DiamondBeaconUpgradeable.sol";
 import {DiamondBeaconProxy} from "../src/DiamondBeaconProxy.sol";
 
 import {BeaconERC165Facet} from "../src/facet/BeaconERC165Facet.sol";
@@ -17,14 +17,16 @@ import {LibDiamond} from "diamond-1-hardhat/libraries/LibDiamond.sol";
 
 import {StorageSlot} from "openzeppelin-contracts/utils/StorageSlot.sol";
 
+import {ERC1967Proxy} from "openzeppelin-contracts/proxy/ERC1967/ERC1967Proxy.sol";
+
 /**
- * @notice This test acts as an example of how to setup the {DiamondBeacon} and
- * as somewhat integration test
+ * @notice This test acts as an example of how to setup the
+ * {DiamondBeaconUpgradeable} and as somewhat integration test
  */
-contract ExampleTest is Test {
+contract ExampleUpgradeableTest is Test {
     SomethingFacet s;
 
-    DiamondBeacon beacon;
+    DiamondBeaconUpgradeable beacon;
     DiamondBeaconProxy proxy;
 
     address owner;
@@ -32,7 +34,6 @@ contract ExampleTest is Test {
     function setUp() public {
         // define the beacon owner / admin
         owner = address(12345);
-
 
         // deploy some implementation
         s = new SomethingFacet();
@@ -57,13 +58,19 @@ contract ExampleTest is Test {
         bytes4[] memory interfaces = new bytes4[](1);
         interfaces[0] = type(ISomething).interfaceId;
 
-        // deploy the diamond beacon and setup the implementations
+        // deploy the beacon implementation
+        address beaconImpl = address(new DiamondBeaconUpgradeable());
+
+        // define the init call
+        bytes memory initCall = abi.encodeCall(DiamondBeaconUpgradeable.init, (owner, cuts));
+
+        // deploy the proxy pointing to the upgradeable beacon implementation
         vm.startPrank(owner);
-        beacon = new DiamondBeacon(owner, cuts);
+        beacon = DiamondBeaconUpgradeable(address(new ERC1967Proxy(beaconImpl, initCall)));
         beacon.setDiamondSupportsInterface(interfaces, true);
         vm.stopPrank();
 
-        // deploy a user facing proxy that points to the beacon
+        // deploy a user facing proxy that points to the beacon construct
         proxy = new DiamondBeaconProxy(address(beacon), "");
     }
 
