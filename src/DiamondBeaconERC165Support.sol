@@ -9,7 +9,8 @@ import {IDiamondBeaconERC165Support} from "./interface/IDiamondBeaconERC165Suppo
 
 /**
  * @notice Abstract mixin of {IDiamondBeaconERC165Support}
- * @dev Looks up supported interface in the diamond storage
+ * @dev Looks up supported interface in the diamond storage in conjunction with
+ * a {BeaconERC165Facet} implementation. This provides ERC165 on Proxy instances
  */
 abstract contract DiamondBeaconERC165Support is IDiamondBeaconERC165Support {
     function diamondSupportsInterface(bytes4 interfaceId) external view override returns (bool) {

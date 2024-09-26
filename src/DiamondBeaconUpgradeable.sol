@@ -23,11 +23,11 @@ import {DiamondLoupeFacet} from "./facet/DiamondLoupeFacet.sol";
 
 /**
  * @notice A {Beacon} implementation that handles DiamondFacets.
- * @dev This beacon directly implements all Diamond-related behavior and allows {DiamondProxy} contracts to
- *      lookup facets for a given function call.
- *      This contract itself should be proxied to allow upgrades of the implementation. This is naturally given
- *      as it directly incorporates diamond facets.
- *      Uses customized {DiamondLoupeFacet} to override ERC165.
+ * @dev This beacon directly implements all Diamond-related behavior and allows
+ * {DiamondProxy} contracts to lookup facets for a given function call. This
+ * contract itself should be proxied to allow upgrades of the implementation.
+ * This is naturally given as it directly incorporates diamond facets.
+ * Uses customized {DiamondLoupeFacet} to override ERC165.
  */
 contract DiamondBeaconUpgradeable is
     UUPSUpgradeable,
@@ -45,7 +45,8 @@ contract DiamondBeaconUpgradeable is
     function init(address _owner, IDiamond.FacetCut[] memory _diamondCut) public initializer {
         LibDiamond.setContractOwner(_owner);
 
-        // it does not make sense to allow any init function call as the contract should only handle the facets
+        // it does not make sense to allow any init function call as the
+        // contract should only handle the facets
         LibDiamond.diamondCut(_diamondCut, address(0), "");
     }
 

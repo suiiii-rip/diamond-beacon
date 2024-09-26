@@ -22,9 +22,7 @@ import {DiamondLoupeFacet} from "./facet/DiamondLoupeFacet.sol";
  * @notice A {Beacon} implementation that handles DiamondFacets.
  * @dev This beacon directly implements all Diamond-related behavior and allows {DiamondProxy} contracts to
  *      lookup facets for a given function call.
- *      This contract itself should be proxied to allow upgrades of the implementation. This is naturally given
- *      as it directly incorporates diamond facets.
- *      Uses customized {DiamondLoupeFacet} to override ERC165.
+ *      Uses customized {DiamondLoupeFacet} to override ERC165 behavior.
  */
 contract DiamondBeacon is
     ERC165DiamondBeacon,
@@ -37,6 +35,7 @@ contract DiamondBeacon is
         LibDiamond.setContractOwner(_owner);
 
         // it does not make sense to allow any init function call as the contract should only handle the facets
+        // and does not have any other state variables
         LibDiamond.diamondCut(_diamondCut, address(0), "");
     }
 }

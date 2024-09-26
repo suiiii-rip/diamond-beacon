@@ -11,8 +11,8 @@ import {DiamondBeaconUtils} from "../util/DiamondBeaconUtils.sol";
 /**
  * @notice {IERC165} facet implementation that forwards requests to the beacon.
  *   The beacon has to implement {IDiamondBeaconERC165Support} as opposed to
- *   {IERC165}. Former allows to access the interface/facet config in the
- *   beacon for the diamond proxy instances.
+ *   {IERC165}. Former allows access to the interface/facet config in the
+ *   beacon to the diamond proxy instances.
  */
 contract BeaconERC165Facet is IERC165 {
     // This implements ERC-165.
