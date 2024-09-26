@@ -4,15 +4,12 @@ pragma solidity ^0.8.20;
 import "forge-std/Test.sol";
 import "../src/ERC165DiamondBeacon.sol";
 
-contract Target is ERC165DiamondBeacon {
-
-}
+contract Target is ERC165DiamondBeacon {}
 
 contract ERC165DiamondBeaconTest is Test {
     Target private t;
 
     function setUp() public {
-
         t = new Target();
     }
 

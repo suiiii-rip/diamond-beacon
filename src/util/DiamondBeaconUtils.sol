@@ -9,8 +9,8 @@ import {IDiamondLoupe} from "diamond-1-hardhat/interfaces/IDiamondLoupe.sol";
 import {SignatureUtils} from "./SignatureUtils.sol";
 
 /**
-  @dev Various functions to handle the {Beacon} slot
-  */
+ * @dev Various functions to handle the {Beacon} slot
+ */
 library DiamondBeaconUtils {
     /**
      * @dev Emitted when the beacon is changed.

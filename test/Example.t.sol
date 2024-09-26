@@ -33,7 +33,6 @@ contract ExampleTest is Test {
         // define the beacon owner / admin
         owner = address(12345);
 
-
         // deploy some implementation
         s = new SomethingFacet();
 
