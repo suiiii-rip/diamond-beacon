@@ -8,6 +8,10 @@ BeaconProxy contracts. Thank you for that.
 
 See `Example.t.sol` and `ExampleUpgradeable.t.sol` for usage examples.
 
+### Overview
+
+![Overview](diamond-beacon.png)
+
 ### Development
 
 Build:
