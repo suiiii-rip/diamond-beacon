@@ -77,6 +77,7 @@ contract DiamondBeaconERC165SupportTest is Test {
     }
 
     function testSetDiamondSupportsInterface_notOwner(address user, bytes4 id) public {
+        vm.assume(user != owner);
         assertFalse(t.diamondSupportsInterface(id));
 
         bytes4[] memory interfaceIds = new bytes4[](1);
