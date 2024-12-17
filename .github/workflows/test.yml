@@ -20,10 +20,19 @@ jobs:
         with:
           submodules: recursive
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
+
+      - name: NPM install
+        run: |
+          npm ci
+        id: npminstall
 
       - name: Show Forge version
         run: |
@@ -38,6 +47,11 @@ jobs:
         run: |
           forge build --sizes
         id: build
+
+      - name: Run solhint
+        run: |
+          npm run solhint
+        id: solhint
 
       - name: Run Forge tests
         run: |

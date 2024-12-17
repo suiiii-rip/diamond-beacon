@@ -1,0 +1,33 @@
+{
+  "name": "diamond-beacon",
+  "version": "0.0.5-alpha.1",
+  "description": "A Diamond Beacon Proxy implementation",
+  "scripts": {
+    "solhint": "solhint src/**/*.sol"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "src/**"
+  ],
+  "keywords": [
+    "beacon",
+    "diamond",
+    "proxy",
+    "blockchain",
+    "solidity"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suiiii-rip/diamond-beacon.git"
+  },
+  "author": "suiiii",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/suiiii-rip/diamond-beacon/issues"
+  },
+  "homepage": "https://github.com/suiiii-rip/diamond-beacon",
+  "devDependencies": {
+    "solhint": "^5.0.3"
+  }
+}
