@@ -15,6 +15,7 @@ import {IDiamondLoupe} from "diamond-1-hardhat/interfaces/IDiamondLoupe.sol";
  * @dev A copy of the original {DiamondLoupeFacet} minus ERC165 as this should be handled separately
  */
 contract DiamondLoupeFacet is IDiamondLoupe {
+    /* solhint-disable no-inline-assembly */
     // Diamond Loupe Functions
     ////////////////////////////////////////////////////////////////////
     /// These functions are expected to be called frequently by tools.
