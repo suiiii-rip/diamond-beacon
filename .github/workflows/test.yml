@@ -9,30 +9,21 @@ env:
   FOUNDRY_PROFILE: ci
 
 jobs:
-  check:
+  test:
     strategy:
       fail-fast: true
 
-    name: Foundry project
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-
-      - name: NPM install
-        run: |
-          npm ci
-        id: npminstall
 
       - name: Show Forge version
         run: |
@@ -48,12 +39,41 @@ jobs:
           forge build --sizes
         id: build
 
-      - name: Run solhint
-        run: |
-          npm run solhint
-        id: solhint
-
       - name: Run Forge tests
         run: |
           forge test -vvv
         id: test
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: NPM install
+        run: |
+          npm ci
+        id: npminstall
+
+      - name: Run solhint
+        run: |
+          npm run solhint-strict
+        id: solhint
+
+  slither:
+    name: Slither
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Slither static analysis
+        uses: crytic/slither-action@v0.4.0
+        id: slither

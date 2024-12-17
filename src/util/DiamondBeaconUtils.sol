@@ -79,6 +79,7 @@ library DiamondBeaconUtils {
 
         if (data.length > 0) {
             bytes4 selector = SignatureUtils.getSelector(data);
+            // slither-disable-next-line unused-return
             Address.functionDelegateCall(IDiamondLoupe(newBeacon).facetAddress(selector), data);
         } else {
             _checkNonPayable();
