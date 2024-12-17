@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {IERC173} from "diamond-1-hardhat/interfaces/IERC173.sol";
-
 import {IDiamond} from "diamond-1-hardhat/interfaces/IDiamond.sol";
-import {IDiamondCut} from "diamond-1-hardhat/interfaces/IDiamondCut.sol";
-import {IDiamondLoupe} from "diamond-1-hardhat/interfaces/IDiamondLoupe.sol";
 
 import {DiamondCutFacet} from "diamond-1-hardhat/facets/DiamondCutFacet.sol";
 import {OwnershipFacet} from "diamond-1-hardhat/facets/OwnershipFacet.sol";
 
 import {LibDiamond} from "diamond-1-hardhat/libraries/LibDiamond.sol";
-import {DiamondArgs} from "diamond-1-hardhat/Diamond.sol";
 
 import {DiamondBeaconERC165Support} from "./DiamondBeaconERC165Support.sol";
 import {ERC165DiamondBeacon} from "./ERC165DiamondBeacon.sol";

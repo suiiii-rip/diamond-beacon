@@ -31,6 +31,7 @@ import {IDiamondLoupe} from "diamond-1-hardhat/interfaces/IDiamondLoupe.sol";
 contract DiamondBeaconProxy is Proxy {
     // An immutable address for the beacon to avoid unnecessary SLOADs before
     // each delegate call.
+    // solhint-disable-next-line immutable-vars-naming
     address private immutable _beacon;
 
     /**
@@ -48,6 +49,8 @@ contract DiamondBeaconProxy is Proxy {
      */
     constructor(address beacon, bytes memory data) payable {
         DiamondBeaconUtils.upgradeBeaconToAndCall(beacon, data);
+        // zero check implicity handled
+        // slither-disable-next-line missing-zero-check
         _beacon = beacon;
     }
 
@@ -94,10 +97,13 @@ contract DiamondBeaconProxy is Proxy {
         _fallback();
     }
 
+    // slither-disable-start dead-code
     /**
      * @dev this implementation is not used and should be dropped by the compiler
      *
      * it has to be overriden tho.
      */
+    // solhint-disable-next-line no-empty-blocks
     function _implementation() internal view virtual override returns (address) {}
+    // slither-disable-end dead-code
 }

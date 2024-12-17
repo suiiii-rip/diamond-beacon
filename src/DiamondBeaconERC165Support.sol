@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {IERC173} from "diamond-1-hardhat/interfaces/IERC173.sol";
-
 import {LibDiamond} from "diamond-1-hardhat/libraries/LibDiamond.sol";
 
 import {IDiamondBeaconERC165Support} from "./interface/IDiamondBeaconERC165Support.sol";
